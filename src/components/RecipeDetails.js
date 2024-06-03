@@ -70,7 +70,7 @@ const FatBar = styled(NutrientBar)`
 `;
 
 const ProteinBar = styled(NutrientBar)`
-  background-color: #8BC34A; 
+  background-color: #8BC34A;
   width: ${({value}) => value}%;
 `;
 
@@ -82,24 +82,15 @@ const CarbBar = styled(NutrientBar)`
 const RecipeDetails = ({recipe, onClose}) => {
   const servings = recipe.yield || 1;
   const caloriesPerServing = (recipe.calories / servings).toFixed(2);
+  const {FAT, PROCNT, CHOCDF} = recipe.totalNutrients;
 
+  const fatPerServing = FAT.quantity.toFixed(2);
+  const proteinPerServing = PROCNT.quantity.toFixed(2);
+  const carbsPerServing = CHOCDF.quantity.toFixed(2);
 
-  const calculatePercentage = (nutrient, dailyValue) => {
-    return ((nutrient / dailyValue) * 100).toFixed(2);
-  };
-
-
-  const fatPerServing = (recipe.digest.find(nutrient => nutrient.label === 'Fat').total / servings).toFixed(2);
-  const proteinPerServing = (recipe.digest.find(nutrient => nutrient.label === 'Protein').total / servings).toFixed(2);
-  const carbsPerServing = (recipe.digest.find(nutrient => nutrient.label === 'Carbs').total / servings).toFixed(2);
-
-
-
-
-  const fatDVPercentage = calculatePercentage(fatPerServing, recipe.digest.find(nutrient => nutrient.label === 'Fat').daily);
-  const proteinDVPercentage = calculatePercentage(proteinPerServing, recipe.digest.find(nutrient => nutrient.label === 'Protein').daily);
-  const carbsDVPercentage = calculatePercentage(carbsPerServing, recipe.digest.find(nutrient => nutrient.label === 'Carbs').daily);
-
+  const fatDVPercentage = recipe.totalDaily.FAT.quantity.toFixed(1);
+  const proteinDVPercentage = recipe.totalDaily.PROCNT.quantity.toFixed(1);
+  const carbsDVPercentage = recipe.totalDaily.CHOCDF.quantity.toFixed(1);
 
   return (
       <Dialog open={!!recipe} onClose={onClose} maxWidth="md" fullWidth>
